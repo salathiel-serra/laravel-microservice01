@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrUpdateCategory;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -24,7 +26,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->repository->get();
-        
+
         return CategoryResource::collection($categories);
     }
 
@@ -34,9 +36,14 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrUpdateCategory $request)
     {
-        //
+        $data        = $request->validated();
+        $data['url'] = Str::slug($data['title'], '-');
+        
+        $category = $this->repository->create($data);
+
+        return new CategoryResource($category);
     }
 
     /**
