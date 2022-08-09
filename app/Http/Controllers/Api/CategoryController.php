@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrUpdateCategory;
 use App\Http\Resources\CategoryResource;
@@ -38,10 +37,7 @@ class CategoryController extends Controller
      */
     public function store(StoreOrUpdateCategory $request)
     {
-        $data        = $request->validated();
-        $data['url'] = Str::slug($data['title'], '-');
-        
-        $category = $this->repository->create($data);
+        $category = $this->repository->create( $request->validated() );
 
         return new CategoryResource($category);
     }
