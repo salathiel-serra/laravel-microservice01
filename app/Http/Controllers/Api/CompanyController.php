@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrUpdateCompany;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 
@@ -34,9 +35,11 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrUpdateCompany $request)
     {
-        //
+        $company = $this->repository->create($request->all());
+
+        return new CompanyResource($company);
     }
 
     /**
